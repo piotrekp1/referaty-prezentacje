@@ -1,0 +1,217 @@
+
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+
+\DeclareRobustCommand{\bbone}{\text{\usefont{U}{bbold}{m}{n}1}}
+
+\DeclareMathOperator{\EX}{\mathbb{E}}% expected value
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\title{Zastosowanie własności równań różnicowych w procesie GARCH}
+\date{2018\\ Październik}
+\author{Piotr Piękos}
+
+\begin{document}
+\maketitle
+
+\section{Stochastyczne równania różnicowe}
+
+Celem mojego referatu jest zastosowanie aparatu stochastycznych równań różnicowych do procesu GARCH co pozwoliłoby wnioskować o własnościach procesu GARCH na podstawie dokonań z dziedziny stochastycznych równań różnicowych.
+
+Zacznę od analizy procesu GARCH(1,1) i przejdę potem do ogólnego procesu GARCH(p,q)
+
+\newpage
+\section{GARCH(1,1)}
+
+Przypomnijmy, że modele GARCH mają postać:
+\begin{itemize}
+\item $X_t = h_t \varepsilon_t$, $t \in \mathbb{Z}$
+\item $h_t^2 = a + bh_{t-1}^2 + cX_{t-1}^2$, $t \in \mathbb{Z}$
+\end{itemize}
+
+co zapiszemy w wygodniejszej dla nas formie
+\[
+    h_t^2 = a + (b+c\varepsilon_t^2)h_t^2
+    \]
+    
+\subsection{Jawny wzór}
+
+Pokażę teraz za pomocą indukcji, że jawny wzór na $h_t^2$ to:
+\[
+h_t^2 = a\sum_{i=0}^{t-t_0}\prod_{j=1}^i(b+c\varepsilon_{t+1-j}^2) + h_*^2\prod_{j=0}^{t-t_0}(b+c\varepsilon_{t-j}^2), \textbf{gdzie}
+\]\[
+h_*^2 = h_{t_0 - 1}^2 \textbf{ - wartość początkowa}
+\]
+UWAGA:\[
+\prod_{j=1}^0 ... = 1
+\]
+
+Dowód: \begin{enumerate}
+\item Baza indukcji - ok
+\item Krok:
+\end{enumerate}
+\begin{equation}
+	\begin{aligned}
+h_{t+1}^2 = a + (b+c\varepsilon_{t+1}^2)h_t^2 = \\
+a + (b+c\varepsilon_{t+1}^2)(a\sum_{i=0}^{t-t_0}\prod_{j=1}^i(b+c\varepsilon_{t+1-j}^2) + h_*^2\prod_{j=0}^{t-t_0}(b+c\varepsilon_{t-j}^2)) = \\
+a + a\sum_{i=0}^{t-t_0}\prod_{j=0}^i(b+c\varepsilon_{t+1-j}^2) + h_*^2\prod_{j=0}^{t+1-t_0}(b+c\varepsilon_{t+1-j}^2) = \\
+a + a\sum_{i=1}^{t+1-t_0}\prod_{j=1}^i(b+c\varepsilon_{t+1-j}^2) + h_*^2\prod_{j=0}^{t+1-t_0}(b+c\varepsilon_{t+1-j}^2) = \\ 
+a\sum_{i=0}^{t+1-t_0}\prod_{j=1}^i(b+c\varepsilon_{t+1-j}^2) + h_*^2\prod_{j=0}^{t+1-t_0}(b+c\varepsilon_{t+1-j}^2)
+	\end{aligned}
+\end{equation}
+\hfill\ensuremath{\square}
+
+\section{Konsekwencje}
+
+Załóżmy $b+c < 1 $ 
+
+Oznaczmy przez $H_*^2$ współczynnik przy $h_*^2$. 
+
+\[
+   H_*^2 = \prod_{j=0}^{t+1-t_0}(b+c\varepsilon_{t+1-j}^2)
+\]
+Zbadajmy jego zachowanie przy $t-t_0 \rightarrow +\infty$
+
+Jest to produkt niezależnych zmiennych losowych o wartości oczekiwanej $b+c$ ($<1$). Więc z twierdzenia z RP2 albo jest on stale równy 1, albo zbiega do 0.
+Ponieważ nie jest stale równy 1 to zbiega do 0.
+
+\[
+   \lim_{t-t_0 \rightarrow +\infty} H_*^2 = 0
+\]
+
+
+Co daje to, że różnica dwóch ciągów o tych samych parametrach, ale różnych wyrazach początkowych$h_*$ zbiega do 0. 
+
+\begin{equation}
+	\begin{aligned}
+\lim_{t-t_0 \rightarrow +\infty} h1_t^2 - h2_t^2 = \\
+ \lim_{t-t_0 \rightarrow +\infty} (a\sum_{i=0}^{t-t_0}\prod_{j=1}^i(b+c\varepsilon_{t+1-j}^2) + h1_*^2\prod_{j=0}^{t-t_0}(b+c\varepsilon_{t-j}^2)) \\
+  - (a\sum_{i=0}^{t-t_0}\prod_{j=1}^i(b+c\varepsilon_{t+1-j}^2) + h2_*^2\prod_{j=0}^{t-t_0}(b+c\varepsilon_{t-j}^2)) = \\
+  \lim_{t-t_0 \rightarrow +\infty} 0 + h1_*^2\prod_{j=0}^{t-t_0}(b+c\varepsilon_{t-j}^2) - h2_*^2\prod_{j=0}^{t-t_0}(b+c\varepsilon_{t-j}^2) = 0
+	\end{aligned}
+\end{equation}
+
+
+Spójrzmy na granicę $h_t^2$ 
+\[
+\lim_{t \rightarrow +\infty} h_t^2 = a\sum_{i=0}^{+\infty}\prod_{j=0}^i(b+c\varepsilon_{t-j}^2)
+\]
+
+Jest ona zbieżna, co widać najłatwiej przez zbieżność wartości oczekiwanej.
+
+\begin{equation}
+	\begin{aligned}
+\lim_{t-t_0 \rightarrow +\infty} \mathbb{E}h_t^2 = a\sum_{i=0}^{+\infty}\prod_{j=0}^i(b+c\varepsilon_{t-j}^2) = a\sum_{i=0}^{+\infty}(b+c)^j = \frac{a}{1-(b+c)} 
+	\end{aligned}
+\end{equation}
+
+Po jawnym granicznym wzorze widać również stacjonarność gdyż mimo $t$ we wzorze, żaden moment nie będzie zalezny od $t$
+
+\subsection{Zachowanie ogona}
+
+Zastosujemy teraz wnioski  Harry'ego Kestena z jego analizy ogólnych stochastycznych równań różnicowych \cite{kesten}. 
+Generalna postać równania analizowana przez Kestena:
+	 \[
+    Y_n = M_nY_{n-1} + Q_n
+  \]
+  
+Gdzie: \begin{itemize}
+\item $Y_n$ - d-wektor
+\item $M_n$ oraz $Q_n$ - macierze d x d
+\end{itemize}
+
+Do tej postaci będziemy sprowadzać analizowane równania z modelu GARCH
+
+Zwrócmy uwagę, że nasz ciąg jest dokładnie takiej postaci, jeżeli podstawimy \begin{itemize}
+\item $Y_n = h_t^2$
+\item $Q_n = a$
+\item $M_n = (b+c\varepsilon^2)$
+\end{itemize}
+
+Załóżmy, że $\mathbb{E}ln(b+c\varepsilon^2) < 0$
+
+Z pracy Kestena skorzystamy z Twierdzenia 4. Ma ono sporo założeń i mówi, że jeśli zostaną spełnione to 
+
+\[
+\lim_{t \rightarrow +\infty} t^{\kappa_1}  P(R \geq t) 
+\], gdzie
+$R$ to nasz rozkład graniczny
+a $\kappa_1$ to stała definiowana na podstawie warunków twierdzenia.
+
+Warunki twierdzenia: Musi istnieć taka $\kappa_0 > 0$, że \begin{enumerate}
+\item $P(Q_1=0) < 1$
+\item $\mathbb{E}|Q_1|^{\kappa_0} < +\infty$
+\item $P(Q_1 \geq 0) = 1$
+\item $\lim_{n \rightarrow +\infty} 1/n log|M_1 ... M_n | = \alpha < 0$
+\item $\mathbb{E}min_i(\sum_j(M_1(i,j))^{\kappa_0} \geq d^{\kappa_0/2}$
+\item $\mathbb{E}|M_1|^{\kappa_0}log^+|M_1| < \infty$
+\item $P(M_1 \geq 0) = 1$
+\item $P(M_1 \textbf{ma wiersz = 0}) = 0$
+\item $\mathbb{E}log|M_1| < +\infty$
+\end{enumerate}
+
+Co dla naszego przypadku GARCH(1,1) daje warunki: \begin{enumerate}
+\item $P(a=0) < 1$
+\item $\mathbb{E}|a|^{\kappa_0} < +\infty$
+\item $P(a \geq 0) = 1$
+\item $\mathbb{E}ln(b+c\varepsilon^2) = \alpha < 0$
+\item $\mathbb{E}(b+c\varepsilon^2)^{\kappa_0} \geq 1$
+\item $\mathbb{E}|b+c\varepsilon^2|^{\kappa_0}log^+|b+c\varepsilon^2| < \infty$
+\item $P(b+c\varepsilon^2 \geq 0) = 1$
+\item $P(b+c\varepsilon^2 = 0) = 0$
+\end{enumerate}
+Wtedy dla dowolnego $0 < \kappa_1 \leq \kappa_0$ zachodzi powyższa własność
+
+Wszystkie warunki poza warunkiem numer 6 i 5 są oczywiste.
+
+Tutaj argument dla warunku 6.
+
+Co daje informację, że 
+\[
+\lim_{t \rightarrow +\infty} t^{\kappa_1}  P(R \geq t) 
+\]. Czyli prawdopodobieństwo tego że ogon jest większy od t jest asymptotycznie mniejsze niż $t^{\kappa_1}$
+
+
+
+\section{GARCH(p,q)}
+
+Dla ogólnego modelu GARCH(p,q) należy podstawić:
+
+\begin{equation}
+	\begin{aligned}
+		Y_t^ = \begin{bmatrix}
+			h_t^2 \\
+			... \\
+			h_{t-d}^2
+		\end{bmatrix} \\
+		d = max(p, q) - 1 \\
+		Q_t = \begin{bmatrix}
+			a \\
+			0 \\
+			..
+			0 \\
+		\end{bmatrix} \\
+		M_t = \begin{bmatrix}
+			(b+c\varepsilon_t^2) & .. &  .. & (b+v\varepsilon_{t-d}^2 \\
+			1  & 0 & .. & 0 \\
+			0 & .. & 1 & 0 \\
+			\end{bmatrix}
+	\end{aligned}
+\end{equation}
+
+I skorzystać z ogólnej formy rozwiązania zaproponowanej przez Kestena
+
+\begin{equation}
+	\begin{aligned}
+		Y_n = \sum_{k=1}^n (\prod_{i=1}^{k-1} M_i) Q_k + \prod_{i=1}^n M_n Y_0
+	\end{aligned}
+\end{equation}
+
+
+\begin{thebibliography}{9}
+\bibitem{kesten} 
+Harry Kesten. 
+\textit{Random difference equations and Renewal theory for products of random matrices}
+Acta Math, 131 207-248, 1973.
+\end{thebibliography}
+\end{document}
