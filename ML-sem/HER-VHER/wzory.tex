@@ -1,0 +1,38 @@
+\documentclass[12pt]{article}
+
+\begin{document}
+$Q(s_t, a_t) = E[R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+2} + ..  | s_t, a_t]$\newline\newline
+$Q(s_t, a_t, g) = E[R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+2} + ..  | s_t, a_t, g]$ %math mode 
+
+\begin{center}
+ \begin{tabular}{|c|} 
+ \hline
+ $s_1, a_1, r_2, s_2, g$  \\ 
+ \hline
+ $s_2, a_2, r_3, s_3, g$  \\
+ \hline
+ $s_3, a_3, r_4, s_4, g$  \\
+ \hline
+ ... \\
+ \hline
+ $s_4, a_4, r_5, s_5, g$  \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+ \begin{tabular}{|c|} 
+ \hline
+ $s_1, a_1, r_2', s_2, g'$  \\ 
+ \hline
+ $s_1, a_1, r_2'', s_2, g''$  \\
+ \hline
+ $s_2, a_2, r_3''', s_3, g'''$  \\
+ \hline
+ $s_2, a_2, r_3'''', s_3, g''''$  \\
+ \hline
+ ... \\
+ \hline
+\end{tabular}
+\end{center}
+\end{document}
